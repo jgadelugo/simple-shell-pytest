@@ -1,15 +1,29 @@
 import subprocess
 import difflib
+from threading import Timer
 import os
 
 
 def myexit(message, code=0):
   "This exits with a custom error message and exit code"
   print(message)
-  exit(code)
+  quit(code)
+
+def printDiff(shout, sherr,shret, hshout, hsherr, hshret):
+    "This prints the diff info for stdout, stderr and exitcodes of two processes."
+    print("----------STDOUT----------")
+    for line in difflib.Differ().compare(shout.splitlines(), hshout.splitlines()):
+      print(line)
+
+    print("----------STDERR----------")
+    for line in difflib.Differ().compare(sherr.splitlines(), hsherr.splitlines()):
+      print(line)
+    print("----------EXIT CODES----------")
+    print('sh exit code: ' + str(shret))
+    print('simple-shell exit code: ' + str(hshret))
 
 def get_commands(filename):
-  "This gets the commands from a file for interactive mode testing"
+  "This gets the commands from a file for noninteractive mode testing"
   if os.path.isfile(filename):
     f = open(filename, 'r')
     if f.mode == 'r':
@@ -17,8 +31,8 @@ def get_commands(filename):
     return []
   myexit('Error: Commands file \'' + filename + '\' does not exist.', 1)
 
-def open_interactive_test(ex):
-  "This prepares two shell processes in interactive mode."
+def open_noninteractive_test(ex):
+  "This prepares two shell processes in noninteractive mode."
   x = subprocess.Popen("",stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,executable="/bin/sh")
   y = subprocess.Popen("", stdin=subprocess.PIPE,
   stdout=subprocess.PIPE,
@@ -26,8 +40,8 @@ def open_interactive_test(ex):
   return (x, y)
 
 
-def test_interactive(tests, sh, hsh):
-  "This interactively tests a list of commands."
+def test_noninteractive(tests, sh, hsh):
+  "This noninteractively tests a list of commands."
   for test in tests:
     sh.stdin.write(test)
     hsh.stdin.write(test)
@@ -38,26 +52,27 @@ def test_interactive(tests, sh, hsh):
   hshout, hsherr = hsh.communicate()
   hshret = hsh.returncode
 
-  print("----------STDOUT----------")
-  for line in difflib.Differ().compare(shout.splitlines(), hshout.splitlines()):
-    print(line)
+  printDiff(shout, sherr, shret, hshout, hsherr, hshret)
 
-  print("----------STDERR----------")
-  for line in difflib.Differ().compare(sherr.splitlines(), hsherr.splitlines()):
-    print(line)
-  print("----------EXIT CODES----------")
-  print('sh exit code: ' + str(shret))
-  print('simple-shell exit code: ' + str(hshret))
-
-def run_interactive(ex, commandfile):
-  "This runs an interactive test using the given executable and the given file with commands"
+def run_noninteractive(ex, commandfile):
+  "This runs a noninteractive test using the given executable and the given file with commands"
   if os.path.exists(ex):
-    print("__________ Interactive Test __________")
+    print("__________ Non-interactive Test __________")
     print("")
-    x,y = open_interactive_test(ex)
-    test_interactive(get_commands(commandfile), x, y)
+    x,y = open_noninteractive_test(ex)
+    test_noninteractive(get_commands(commandfile), x, y)
     return
-  myexit("Error: Executable file " + ex + " not found.")
+  myexit("Error: Executable file " + ex + " not found.", 1)
 
 
-run_interactive("/bin/bash","temptest")
+def timeout_error():
+  myexit("It's taking awhile. Infinite loop? (use Ctrl+C to exit early.)")
+
+
+
+timeout = Timer(5,timeout_error)
+timeout.start()
+run_noninteractive("/bin/bash", "temptest")
+print("")
+timeout.cancel()
+myexit("Diff successful.", 0)
