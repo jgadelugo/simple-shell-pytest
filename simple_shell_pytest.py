@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import subprocess
 import difflib
 from threading import Timer
