@@ -2,6 +2,7 @@ import subprocess
 import difflib
 from threading import Timer
 import os
+import sys
 
 
 def myexit(message, code=0):
@@ -69,10 +70,15 @@ def timeout_error():
   myexit("It's taking awhile. Infinite loop? (use Ctrl+C to exit early.)")
 
 
+if (len(sys.argv) == 3):
+  arg1 = sys.argv[1]
+  arg2 = sys.argv[2]
+else:
+  myexit("Error: Usage - ./simple_shell_test.py EXECUTABLE COMMANDFILE", 1)
 
 timeout = Timer(5,timeout_error)
 timeout.start()
-run_noninteractive("/bin/bash", "temptest")
+run_noninteractive(arg1, arg2)
 print("")
 timeout.cancel()
 myexit("Diff successful.", 0)
