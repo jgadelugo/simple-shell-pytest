@@ -35,10 +35,8 @@ def get_commands(filename):
 
 def open_noninteractive_test(ex):
   "This prepares two shell processes in noninteractive mode."
-  x = subprocess.Popen("",stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,executable="/bin/sh")
-  y = subprocess.Popen("", stdin=subprocess.PIPE,
-  stdout=subprocess.PIPE,
-  stderr=subprocess.PIPE,executable=ex)
+  x = subprocess.Popen("sh", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable="/bin/sh")
+  y = subprocess.Popen(ex, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable="/bin/sh")
   return (x, y)
 
 
