@@ -21,7 +21,7 @@ interactive mode (with a printed prompt string).
 ## What does it do?
 
 ~~~
-It takes a simple shell executable and a file with
+It takes a simple shell executable and a text file with
 commands in it, and it runs all the commands in the
 file in non-interactive mode for both /bin/sh and
 your simple shell. It will then show you the unified
@@ -38,7 +38,7 @@ The program is used in the form
 
 with EXECUTABLE replaced by the name of your simple
 shell program and COMMANDFILE replaced by the name
-of the file containing the commands you want to run.
+of the text file containing the commands you want to run.
 
 The format of the COMMANDFILE file is just every command
 to run on a separate line. For example:
