@@ -1,0 +1,8 @@
+ls
+# The first command should simply invoke ls with not errors, extra lines or parameters
+
+pwd
+# Should print the current directory
+
+la
+# This should invoke an error saying "la: command not found"
