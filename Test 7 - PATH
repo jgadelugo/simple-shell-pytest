@@ -2,6 +2,6 @@ ls
 ls -l
 pwd ..
 man man
-less maeofoiwe
+man some_error
 
 
