@@ -1,0 +1,5 @@
+ls -la ../
+echo "TEST"
+ ls
+ls   -la
+exit
