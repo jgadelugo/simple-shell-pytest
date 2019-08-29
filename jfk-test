@@ -1,0 +1,6 @@
+cat *.c
+ls -al
+ls -R
+cd -
+cd ~
+echo "This is my README.md" > README.md
