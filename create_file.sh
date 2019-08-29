@@ -1,2 +1,2 @@
 nano apple
-echo "fun times"
+echo "fun times" | apple
