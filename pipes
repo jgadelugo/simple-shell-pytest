@@ -1,0 +1,3 @@
+wc -l | holberton.h
+head -11 file|tail -6 > file1
+ls -al | more
